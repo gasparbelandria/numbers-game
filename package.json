@@ -1,8 +1,15 @@
 {
   "name": "chat-translator",
   "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "*",
+    "jade": "*",
+    "socket.io": "*",
+    "stylus": "*"
+  },
   "engines": {
-    "node": "0.10.32",
-    "npm": "1.4.28"
+    "node": "*",
+    "npm": "*"
   }
 }
