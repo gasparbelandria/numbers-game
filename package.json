@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "*",
-    "jade": "*",
-    "socket.io": "*",
-    "stylus": "*"
+    "express": "2.5.8",
+    "jade": "0.31.2",
+    "socket.io": "1.0.6",
+    "stylus": "0.22.5"
   },
   "engines": {
-    "node": "*",
-    "npm": "*"
+    "node": "0.10.32",
+    "npm": "1.4.28"
   }
 }
