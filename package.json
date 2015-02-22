@@ -1,15 +1,15 @@
 {
-    "name": "chat-translator"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.8"
-    , "socket.io": "0.8.7"
-    , "stylus": "0.22.5"
-    , "jade": ">= 0.0.1"
-  }
-  , "engines": {
-  	"node": "0.8.14",
-  	"npm": "1.1.65"
+  "name": "chat-translator",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": ">= 0.0.1",
+    "socket.io": "^0.8.7",
+    "stylus": "0.22.5"
+  },
+  "engines": {
+    "node": "0.8.14",
+    "npm": "1.1.65"
   }
 }

@@ -1,6 +1,7 @@
 !!!
 html
   head
+    meta http-equiv="X-FRAME-Options" content="SameOrigin"
     title Node.js Chat Server
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
@@ -11,6 +12,7 @@ html
         var users = $('.users');
         var usersList = $('.users ul');
         var messages = $('.messages');
+        var audio = $('#audio');
         var nickname = $('#nickname');
         var messageForm = $('.message-box form');
         var message = $('.message');
@@ -18,12 +20,28 @@ html
         var login = $('.login');
         var setNicknameForm = $('.login form');
         var showButton = $('.show');
+        var iframes = $('#iframes');
+        var number;
+        var messageSend = {};
+        var iframeId = '';
+
+        for (var i = 1; i < 100; i++) {
+            setTimeout(function(x) {
+              return function() {
+                number = Math.floor(Math.random() * (2015 - 1900 + 1)) + 1900;
+                iframes.attr('src','http://translate.google.com/translate_tts?tl=en&q='+number+"&output=embed");
+                iframeId = Date.now();
+                iframes.attr('id',iframeId);
+              };
+            }(i), 5000*i);
+        }
+
 
         nickname.focus(function() {
           $(this).val('');
         });
 
-        nickname.val("Tu Nombre de Usuario");
+        nickname.val("Your username");
 
         socket.on('nicknames', function (data) {
           var html = '';
@@ -64,7 +82,10 @@ html
         */
         messageForm.submit(function(event) {
           event.preventDefault(); 
-          socket.emit('user message', message.val());
+          messageSend.number = number;
+          messageSend.response = message.val();
+          console.log(messageSend);
+          socket.emit('user message', message.val()+','+number);
           message.val('').focus();
         });
 
@@ -106,8 +127,9 @@ html
 
 
 body!= body
+  iframe(src="", id="iframes", style="visibility: hidden;")
   section.login
-    h1 Servidor de Chat Node.js
+    h1 Write your name
     form
       input(type='text', id='nickname')
       button Enviar
@@ -119,6 +141,4 @@ body!= body
     section.message-box 
       form
         input.message
-        button Enviar
-
-
+        button(id="send") Enviar
