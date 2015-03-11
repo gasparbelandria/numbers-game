@@ -1,8 +1,6 @@
 var port = process.env.PORT || 3000;
 var express = require('express'),
-    routes = require('./routes'),
-    unirest = require('unirest'),
-    request = require('request');
+    routes = require('./routes');
 
 
 var app = module.exports = express.createServer(),
@@ -63,7 +61,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  //app.use(require('stylus').middleware({ src: __dirname + '/public' }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });

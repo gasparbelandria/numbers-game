@@ -22,18 +22,37 @@ html
         var showButton = $('.show');
         var iframes = $('#iframes');
         var number;
+        var dd;
+        var mm;
+        var yy;
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var random;
         var messageSend = {};
         var iframeId = '';
 
         for (var i = 1; i < 100; i++) {
             setTimeout(function(x) {
               return function() {
-                number = Math.floor(Math.random() * (2015 - 1900 + 1)) + 1900;
+                random = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                if (number===1){
+                  number = Math.floor(Math.random() * (9999 - 0 + 1)) + 0;
+                }else{
+                  dd = Math.floor(Math.random() * (28 - 1 + 1)) + 1;
+                  mm = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
+                  yy = Math.floor(Math.random() * (2015 - 1920 + 1)) + 1900;
+                  number = months[mm] + ' ' + dd + ' ' + yy;
+                }
+                console.log(number);
                 iframes.attr('src','http://translate.google.com/translate_tts?tl=en&q='+number+"&output=embed");
                 iframeId = Date.now();
                 iframes.attr('id',iframeId);
+                if (number!==1){
+                  monthNumber = parseInt(mm)+1;
+                  number = monthNumber + '' + dd + '' + yy;
+                  console.log(number);
+                }
               };
-            }(i), 5000*i);
+            }(i), 10000*i);
         }
 
 
@@ -129,7 +148,7 @@ html
 body!= body
   iframe(src="", id="iframes", style="visibility: hidden;")
   section.login
-    h1 Write your name
+    h1 English practices
     form
       input(type='text', id='nickname')
       button Enviar
@@ -141,4 +160,4 @@ body!= body
     section.message-box 
       form
         input.message
-        button(id="send") Enviar
+        button(id="send") Enviar        
