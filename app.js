@@ -2,9 +2,11 @@ var port = process.env.PORT || 3000;
 var express = require('express'),
     routes = require('./routes');
 
+
 var app = module.exports = express.createServer(),
     io = require('socket.io').listen(app),
-    nicknames = [];
+    nicknames = [],
+    messageReturned = '';
 
 app.listen(port);
 
@@ -25,9 +27,16 @@ io.sockets.on('connection', function (socket) {
     }
   });
   socket.on('user message', function (data) {
+    var val = data.split(',');
+    if (parseInt(val[0])===parseInt(val[1])){
+      messageReturned = parseInt(val[0]) + ' WIN';
+    }else{
+      messageReturned = parseInt(val[0]) + ' lost';
+    }
+    console.log(parseInt(val[0]) +' = '+ parseInt(val[1]));
     io.sockets.emit('user message', { 
       nick: socket.nickname, 
-      message: data 
+      message: messageReturned
     });
   });
 
@@ -52,7 +61,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  //app.use(require('stylus').middleware({ src: __dirname + '/public' }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });

@@ -1,6 +1,7 @@
 !!!
 html
   head
+    meta http-equiv="X-FRAME-Options" content="SameOrigin"
     title Node.js Chat Server
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
@@ -11,6 +12,7 @@ html
         var users = $('.users');
         var usersList = $('.users ul');
         var messages = $('.messages');
+        var audio = $('#audio');
         var nickname = $('#nickname');
         var messageForm = $('.message-box form');
         var message = $('.message');
@@ -18,12 +20,55 @@ html
         var login = $('.login');
         var setNicknameForm = $('.login form');
         var showButton = $('.show');
+        var iframes = $('#iframes');
+        var number;
+        var dd;
+        var mm;
+        var yy;
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var letters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        var random;
+        var randomLetter;
+        var messageSend = {};
+        var iframeId = '';
+
+        for (var i = 1; i < 100; i++) {
+            setTimeout(function(x) {
+              return function() {
+                random = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                if (random===1){
+                  random = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                  if (random===1){
+                    randomLetter = Math.floor(Math.random() * (25 - 0 + 25)) + 0;
+                    number = letters[randomLetter];
+                  }else{
+                    number = Math.floor(Math.random() * (9999 - 0 + 1)) + 0;
+                  }
+                }else{
+                  dd = Math.floor(Math.random() * (27 - 1 + 1)) + 1;
+                  mm = Math.floor(Math.random() * (11 - 1 + 1)) + 1;
+                  yy = Math.floor(Math.random() * (2015 - 1920 + 1)) + 1900;
+                  number = months[mm] + ' ' + dd + ' ' + yy;
+                }
+                console.log(number);
+                iframes.attr('src','http://translate.google.com/translate_tts?tl=en&q='+number+"&output=embed");
+                iframeId = Date.now();
+                iframes.attr('id',iframeId);
+                if (number!==1){
+                  monthNumber = parseInt(mm)+1;
+                  number = monthNumber + '' + dd + '' + yy;
+                  console.log(number);
+                }
+              };
+            }(i), 10000*i);
+        }
+
 
         nickname.focus(function() {
           $(this).val('');
         });
 
-        nickname.val("Tu Nombre de Usuario");
+        nickname.val("Your username");
 
         socket.on('nicknames', function (data) {
           var html = '';
@@ -64,7 +109,10 @@ html
         */
         messageForm.submit(function(event) {
           event.preventDefault(); 
-          socket.emit('user message', message.val());
+          messageSend.number = number;
+          messageSend.response = message.val();
+          console.log(messageSend);
+          socket.emit('user message', message.val()+','+number);
           message.val('').focus();
         });
 
@@ -106,8 +154,9 @@ html
 
 
 body!= body
+  iframe(src="", id="iframes", style="visibility: hidden;")
   section.login
-    h1 Servidor de Chat Node.js
+    h1 English practices
     form
       input(type='text', id='nickname')
       button Enviar
@@ -119,6 +168,4 @@ body!= body
     section.message-box 
       form
         input.message
-        button Enviar
-
-
+        button(id="send") Enviar        
