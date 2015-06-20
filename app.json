@@ -1,0 +1,13 @@
+{
+  "name":"numbers-game",
+  "scripts":{},
+  "env":{
+    "BUILDPACK_URL":{
+      "required":true
+    },
+    "NODE_MODULES_CACHE":{
+      "required":true
+    }
+  },
+  "addons":[]
+}
