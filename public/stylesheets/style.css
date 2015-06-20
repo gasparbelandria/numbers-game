@@ -391,3 +391,11 @@ ul span {
   -webkit-box-shadow: 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff;
 }
+
+.success{
+  color: blue;
+}
+
+.fail {
+  color: red;
+}

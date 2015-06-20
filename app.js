@@ -6,7 +6,9 @@ var express = require('express'),
 var app = module.exports = express.createServer(),
     io = require('socket.io').listen(app),
     nicknames = [],
-    messageReturned = '';
+    messageReturned = '',
+    successReturned,
+    failReturned;
 
 app.listen(port);
 
@@ -22,21 +24,27 @@ io.sockets.on('connection', function (socket) {
       io.sockets.emit('nicknames', nicknames);
       socket.broadcast.emit('announcement', {
         nick: 'system',
-        message: data + ' conectado' 
+        message: data + ' conectado'
       });
     }
   });
   socket.on('user message', function (data) {
+    console.log(data);
     var val = data.split(',');
-    if (parseInt(val[0])===parseInt(val[1])){
-      messageReturned = parseInt(val[0]) + ' WIN';
+    if (val[0]==val[1]){
+      messageReturned = val[0] + ' success';
+      successReturned = parseInt(val[2]) + 1;
+      failReturned = val[3];
     }else{
-      messageReturned = parseInt(val[0]) + ' lost';
+      messageReturned = val[0] + ' fail';
+      successReturned = val[2];
+      failReturned = parseInt(val[3]) + 1;
     }
-    console.log(parseInt(val[0]) +' = '+ parseInt(val[1]));
     io.sockets.emit('user message', { 
       nick: socket.nickname, 
-      message: messageReturned
+      message: messageReturned,
+      success: successReturned,
+      fail: failReturned
     });
   });
 

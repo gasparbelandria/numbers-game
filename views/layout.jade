@@ -10,6 +10,8 @@ html
       var socket = io.connect();
       jQuery(function ($) { 
         var users = $('.users');
+        var success = $('#success');
+        var fail = $('#fail');
         var usersList = $('.users ul');
         var messages = $('.messages');
         var audio = $('#audio');
@@ -25,8 +27,11 @@ html
         var dd;
         var mm;
         var yy;
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var wasDate = false;
+        var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        var letters = ['a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
         var random;
+        var randomLetter;
         var messageSend = {};
         var iframeId = '';
 
@@ -34,27 +39,38 @@ html
             setTimeout(function(x) {
               return function() {
                 random = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
-                if (number===1){
-                  number = Math.floor(Math.random() * (9999 - 0 + 1)) + 0;
+                if (random===1){
+                  random = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                  if (random===1){
+                    randomLetter = Math.floor(Math.random() * 25) + 1
+                    number = letters[randomLetter];
+                    console.log('letra ' + randomLetter);
+                  }else{
+                    console.log('numero');
+                    number = Math.floor(Math.random() * (9999 - 0 + 1)) + 0;
+                  }
                 }else{
-                  dd = Math.floor(Math.random() * (28 - 1 + 1)) + 1;
-                  mm = Math.floor(Math.random() * (12 - 1 + 1)) + 1;
+                  dd = Math.floor(Math.random() * (27 - 1 + 1)) + 1;
+                  mm = Math.floor(Math.random() * (11 - 1 + 1)) + 1;
                   yy = Math.floor(Math.random() * (2015 - 1920 + 1)) + 1900;
-                  number = months[mm] + ' ' + dd + ' ' + yy;
+                  //number = months[mm] + ' ' + dd + ' ' + yy; // English format
+                  number = dd + ' de ' + months[mm] + ' de ' + yy;
+                  wasDate = true;
+                  console.log('fecha');
                 }
-                console.log(number);
-                iframes.attr('src','http://translate.google.com/translate_tts?tl=en&q='+number+"&output=embed");
-                iframeId = Date.now();
-                iframes.attr('id',iframeId);
-                if (number!==1){
-                  monthNumber = parseInt(mm)+1;
-                  number = monthNumber + '' + dd + '' + yy;
-                  console.log(number);
+                if (number!='undefined'){
+                  iframes.attr('src','http://translate.google.com/translate_tts?tl=es&q='+number+"&output=embed");
+                  iframeId = Date.now();
+                  iframes.attr('id',iframeId);
+                  if (wasDate){
+                    monthNumber = parseInt(mm)+1;
+                    number = dd + '' + monthNumber + '' + yy;
+                    wasDate = false;
+                  }
                 }
               };
             }(i), 10000*i);
         }
-
 
         nickname.focus(function() {
           $(this).val('');
@@ -75,7 +91,9 @@ html
         });
 
         socket.on('user message', function (data) {
-          messages.append('<p><strong>' + data.nick + '</strong> ' +  data.message + '</p>');
+          messages.append('<p><strong>' + data.nick + '</strong> ' +  data.message + ' (<span class="success">' + data.success + '</span> / <span class="fail">' + data.fail + '</span>) </p>');
+          success.val(data.success);
+          fail.val(data.fail);
         });
 
         /*
@@ -83,6 +101,7 @@ html
         * Un callback es recibido desde el servidor. Si es true entonces el nombre 
         * ya ha sido tomado. 
         */
+
         setNicknameForm.submit(function(event) {
           event.preventDefault(); 
           socket.emit('nickname', nickname.val(), function (data) {
@@ -91,7 +110,7 @@ html
               login.hide();
               wrapper.show();
             } else {
-              setNicknameForm.prepend('<p>Nombre de usuario ya tomado. Elige otro.</p>');
+              setNicknameForm.prepend('<p>Nombre de usuario ha sido tomado. Elige otro.</p>');
             }
           });
         });
@@ -103,8 +122,8 @@ html
           event.preventDefault(); 
           messageSend.number = number;
           messageSend.response = message.val();
-          console.log(messageSend);
-          socket.emit('user message', message.val()+','+number);
+          console.log(message.val()+','+number);
+          socket.emit('user message', message.val()+','+number+','+success.val()+','+fail.val());
           message.val('').focus();
         });
 
@@ -148,7 +167,7 @@ html
 body!= body
   iframe(src="", id="iframes", style="visibility: hidden;")
   section.login
-    h1 English practices
+    h1 Spanish practices
     form
       input(type='text', id='nickname')
       button Enviar
@@ -159,5 +178,7 @@ body!= body
       ul
     section.message-box 
       form
+        input(type='hidden', id='success', value='0')
+        input(type='hidden', id='fail', value='0')
         input.message
         button(id="send") Enviar        
