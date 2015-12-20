@@ -5,10 +5,11 @@ html
     title Node.js Chat Server
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+    script(src='/js/responsivevoice.js')
     script(src='/socket.io/socket.io.js')
     script
       var socket = io.connect();
-      jQuery(function ($) { 
+      jQuery(function ($) {
         var users = $('.users');
         var success = $('#success');
         var fail = $('#fail');
@@ -22,7 +23,6 @@ html
         var login = $('.login');
         var setNicknameForm = $('.login form');
         var showButton = $('.show');
-        var iframes = $('#iframes');
         var number;
         var dd;
         var mm;
@@ -33,7 +33,10 @@ html
         var random;
         var randomLetter;
         var messageSend = {};
-        var iframeId = '';
+
+      //console.warn(SpeechSynthesisUtterance);
+      //SpeechSynthesisUtterance.lang = "es";
+
 
         for (var i = 1; i < 100; i++) {
             setTimeout(function(x) {
@@ -59,9 +62,8 @@ html
                   console.log('fecha');
                 }
                 if (number!='undefined'){
-                  iframes.attr('src','http://translate.google.com/translate_tts?tl=es&q='+number+"&output=embed");
-                  iframeId = Date.now();
-                  iframes.attr('id',iframeId);
+                  console.log(number);
+                  responsiveVoice.speak(number, "Spanish Latin American Female");
                   if (wasDate){
                     monthNumber = parseInt(mm)+1;
                     number = dd + '' + monthNumber + '' + yy;
@@ -98,12 +100,12 @@ html
 
         /*
         * Configurar el nombre de usuario para un usuario
-        * Un callback es recibido desde el servidor. Si es true entonces el nombre 
-        * ya ha sido tomado. 
+        * Un callback es recibido desde el servidor. Si es true entonces el nombre
+        * ya ha sido tomado.
         */
 
         setNicknameForm.submit(function(event) {
-          event.preventDefault(); 
+          event.preventDefault();
           socket.emit('nickname', nickname.val(), function (data) {
             if (data) {
               console.log('Nombre de usuario configurado de modo correcto');
@@ -119,7 +121,7 @@ html
         * Enviar un mensaje al servidor
         */
         messageForm.submit(function(event) {
-          event.preventDefault(); 
+          event.preventDefault();
           messageSend.number = number;
           messageSend.response = message.val();
           console.log(message.val()+','+number);
@@ -133,7 +135,7 @@ html
                 'padding-right': '+=2',
                 'margin-left': '-=2'
               }, 150);
-            }, 
+            },
             function () {
               $(this).animate({
                 'padding-right': '-=2',
@@ -165,7 +167,6 @@ html
 
 
 body!= body
-  iframe(src="", id="iframes", style="visibility: hidden;")
   section.login
     h1 Spanish practices
     form
@@ -176,9 +177,9 @@ body!= body
       a(title='Mostrar usuarios').show <
     section.users
       ul
-    section.message-box 
+    section.message-box
       form
         input(type='hidden', id='success', value='0')
         input(type='hidden', id='fail', value='0')
         input.message
-        button(id="send") Enviar        
+        button(id="send") Enviar
