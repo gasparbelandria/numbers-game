@@ -20,10 +20,12 @@ html
         var messageForm = $('.message-box form');
         var message = $('.message');
         var wrapper = $('.wrapper');
+        var repeat;
+        var silent;
         var login = $('.login');
         var setNicknameForm = $('.login form');
         var showButton = $('.show');
-        var number;
+        var number, lastNumber;
         var dd;
         var mm;
         var yy;
@@ -33,10 +35,6 @@ html
         var random;
         var randomLetter;
         var messageSend = {};
-
-      //console.warn(SpeechSynthesisUtterance);
-      //SpeechSynthesisUtterance.lang = "es";
-
 
         for (var i = 1; i < 100; i++) {
             setTimeout(function(x) {
@@ -61,7 +59,14 @@ html
                   wasDate = true;
                   console.log('fecha');
                 }
-                if (number!='undefined'){
+                repeat = $('#repeat:checked').length;
+                silent = $('#silent:checked').length;
+                if (repeat){
+                  number = lastNumber;
+                }else{
+                  lastNumber = number;
+                }
+                if ((number!='undefined') && (!silent)){
                   console.log(number);
                   responsiveVoice.speak(number, "Spanish Latin American Female");
                   if (wasDate){
@@ -181,5 +186,12 @@ body!= body
       form
         input(type='hidden', id='success', value='0')
         input(type='hidden', id='fail', value='0')
+        input(type='checkbox', id='repeat')
+        | Repetir
+        br
+        label.checkbox Silenciar
+          input(type='checkbox', id='silent')
+          | Silenciar
         input.message
         button(id="send") Enviar
+
