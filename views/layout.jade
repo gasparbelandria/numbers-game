@@ -57,7 +57,6 @@ html
                   //number = months[mm] + ' ' + dd + ' ' + yy; // English format
                   number = dd + ' de ' + months[mm] + ' de ' + yy;
                   wasDate = true;
-                  console.log('fecha');
                 }
                 repeat = $('#repeat:checked').length;
                 silent = $('#silent:checked').length;
@@ -67,7 +66,7 @@ html
                   lastNumber = number;
                 }
                 if ((number!='undefined') && (!silent)){
-                  //responsiveVoice.speak(number, "Spanish Latin American Female");
+                  responsiveVoice.speak(number, "Spanish Latin American Female");
                   if (wasDate){
                     monthNumber = parseInt(mm)+1;
                     number = dd + '' + monthNumber + '' + yy;
