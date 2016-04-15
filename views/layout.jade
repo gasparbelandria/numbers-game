@@ -67,8 +67,7 @@ html
                   lastNumber = number;
                 }
                 if ((number!='undefined') && (!silent)){
-                  console.log(number);
-                  responsiveVoice.speak(number, "Spanish Latin American Female");
+                  //responsiveVoice.speak(number, "Spanish Latin American Female");
                   if (wasDate){
                     monthNumber = parseInt(mm)+1;
                     number = dd + '' + monthNumber + '' + yy;
@@ -186,12 +185,16 @@ body!= body
       form
         input(type='hidden', id='success', value='0')
         input(type='hidden', id='fail', value='0')
-        input(type='checkbox', id='repeat')
-        | Repetir
-        br
-        label.checkbox Silenciar
+        div.check
+          input(type='checkbox', id='repeat')
+        div.checklabel.strong
+          | Repeat
+        div.clear
+        div.check
           input(type='checkbox', id='silent')
-          | Silenciar
+        div.checklabel.strong
+          | Silent
+        div.clear
         input.message
         button(id="send") Enviar
 

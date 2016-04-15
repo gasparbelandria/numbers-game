@@ -344,7 +344,8 @@ ul {
   color: #008000;
   list-style-position: inside;
   font-size: 1.2em;
-li
+}
+li{
   padding: 5px;
 }
 ul span {
@@ -400,3 +401,24 @@ ul span {
   color: red;
 }
 
+.check{
+  float:left;
+  width:20px;
+  border:0px solid red;
+  height:30px;
+  top: 0;
+}
+.checklabel{
+  float:left;
+  width:240px;
+  border:0px solid red;
+  height:20px;
+  margin-top: 10px;
+}
+.clear{
+  clear: both;
+}
+
+.strong{
+  font-weight: bold;
+}
